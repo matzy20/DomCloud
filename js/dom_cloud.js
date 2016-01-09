@@ -8,38 +8,37 @@ var treeRoot = document.documentElement;
 var domCloud = {
 
   elementTracker: {},
-  attributeTracker: {},
+  attributeTracker: {
+    // attribute: treeRoot.attributes,
+  },
   //method on object domCloud
   findingElements: function (element) {
-
     var elementType = element.tagName;
 
     if (domCloud.elementTracker.hasOwnProperty(elementType)){
       domCloud.elementTracker[elementType]++;
-    } else{
+      } else{
       //setting it to 1 vs 'adding' to it
       domCloud.elementTracker[elementType] = 1;
-    }
+      }
     //since we're pulling via tagName no need a base? Similar to attribute?
     /*console.log("length", element.children.length);
     used the above to check what's printing out*/
     for (var i = 0; i < element.children.length; i++){
       domCloud.findingElements(element.children[i]);
     }
-  }
+  },
 
-  findingAttributes: function (attribute) {
+  findingAttributes: function (element) {
+    var attributeType = element.attributes;
 
-    var checkAttribute = attribute.getAttribute();
-    console.log(checkAttribute);
-
-    if (domCloud.attributeTracker.hasOwnProperty(checkAttribute)){
-      domCloud.attributeTracker[checkAttribute]++;
+    if (domCloud.attributeTracker.hasOwnProperty(attributeType)){
+      domCloud.attributeTracker[attributeType]++;
     } else {
-      domCloud.attributeTracker[checkAttribute] = 1;
+      domCloud.attributeTracker[attributeType] = 1;
     }
-    for (var i = 0; i < checkAttribute.children.length; i++){
-      domCloud.findingAttributes(attribute.children[i]);
+    for (var i = 0; i < element.children.length; i++){
+      domCloud.findingAttributes(element.children[i]);
     }
   }
 };
