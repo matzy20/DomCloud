@@ -8,13 +8,10 @@ var treeRoot = document.documentElement;
 var domCloud = {
 
   elementTracker: {},
-  attributeTracker: {
-    // attribute: treeRoot.attributes,
-  },
+  attributeTracker: {},
   //method on object domCloud
   findingElements: function (element) {
     var elementType = element.tagName;
-
     if (domCloud.elementTracker.hasOwnProperty(elementType)){
       domCloud.elementTracker[elementType]++;
       } else{
@@ -29,17 +26,26 @@ var domCloud = {
     }
   },
 
-  findingAttributes: function (element) {
-    var attributeType = element.attributes;
+  findingAttributes: function (attribute) {
+    //it's needing to pull attributes off of an object, which it isn't
+    var attributeType = attribute.querySelectorAll('script, link, div, section, header, abbr, a, p, aside, h3, li');
+    // console.log(attributeType);
 
-    if (domCloud.attributeTracker.hasOwnProperty(attributeType)){
-      domCloud.attributeTracker[attributeType]++;
-    } else {
-      domCloud.attributeTracker[attributeType] = 1;
+    for (var i = 0; i < attributeType.length; i++){
+      var currentAttributeList = attributeType[i].attributes;
+      for (var j = 0; j < currentAttributeList.length; j ++){
+        //element or nodes' attributes property provides all attributes for that element
+        var attributeToCount = currentAttributeList[j].name;
+        console.log(attributeToCount);
+      if (domCloud.attributeTracker[attributeToCount]){
+        domCloud.attributeTracker[attributeToCount]++;
+      } else {
+        domCloud.attributeTracker[attributeToCount] = 1;
+      }
+      }
+      // console.log(domCloud.attributeTracker);
     }
-    for (var i = 0; i < element.children.length; i++){
-      domCloud.findingAttributes(element.children[i]);
-    }
+
   }
 };
 //need window onload since <script> was located at top of html
@@ -47,6 +53,7 @@ var domCloud = {
 window.onload = function (){
   domCloud.findingElements(treeRoot);
   domCloud.findingAttributes(treeRoot);
+
   console.log(domCloud.elementTracker);
   console.log(domCloud.attributeTracker);
 };
